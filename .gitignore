@@ -1,0 +1,23 @@
+# Terraform working files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Local variable files may contain secrets
+*.tfvars
+*.tfvars.json
+.terraformrc
+terraform.rc
+
+# Credentials and environment secrets
+.env
+.env.*
+!.env.example
+.aws/
+
+# Editor and operating-system files
+.vscode/
+.DS_Store
+Thumbs.db
