@@ -51,7 +51,7 @@ jobs:
           exit-code: "1"
           format: table
 
-      -
+
       - name: Scan insecure test fixture
         id: insecure_scan
         uses: aquasecurity/trivy-action@v0.36.0
