@@ -1,0 +1,62 @@
+
+name: Terraform Security Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  terraform-validation:
+    name: Terraform Format and Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.14.0"
+
+      - name: Check Terraform formatting
+        run: terraform -chdir=terraform fmt -check -recursive
+
+      - name: Initialize Terraform without a backend
+        run: terraform -chdir=terraform init -backend=false
+
+      - name: Validate Terraform
+        run: terraform -chdir=terraform validate
+
+  trivy-security-scan:
+    name: Trivy Infrastructure Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Scan hardened Terraform configuration
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: config
+          scan-ref: terraform
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+          format: table
+
+      - name: Scan insecure test fixture
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: config
+          scan-ref: tests/fixtures/insecure-s3
+          severity: HIGH,CRITICAL
+          exit-code: "0"
+          format: table
+
