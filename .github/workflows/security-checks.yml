@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Scan hardened Terraform configuration
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: config
           scan-ref: terraform
@@ -52,7 +52,7 @@ jobs:
           format: table
 
       - name: Scan insecure test fixture
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: config
           scan-ref: tests/fixtures/insecure-s3
