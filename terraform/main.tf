@@ -62,15 +62,15 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "evidence" {
   bucket = aws_s3_bucket.evidence.id
 
   rule {
-    
-apply_server_side_encryption_by_default {
-  sse_algorithm     = "aws:kms"
-  kms_master_key_id = aws_kms_key.evidence.arn
-}
-    }
 
-   
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "aws:kms"
+      kms_master_key_id = aws_kms_key.evidence.arn
+    }
   }
+
+
+}
 
 
 resource "aws_s3_bucket_versioning" "evidence" {
