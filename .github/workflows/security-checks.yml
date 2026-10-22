@@ -55,6 +55,7 @@ jobs:
       - name: Scan insecure test fixture
         id: insecure_scan
         uses: aquasecurity/trivy-action@v0.36.0
+        continue-on-error: true
         with:
           scan-type: config
           scan-ref: tests/fixtures/insecure-s3
