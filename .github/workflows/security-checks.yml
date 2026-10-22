@@ -51,12 +51,36 @@ jobs:
           exit-code: "1"
           format: table
 
+      -
       - name: Scan insecure test fixture
+        id: insecure_scan
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: config
           scan-ref: tests/fixtures/insecure-s3
           severity: HIGH,CRITICAL
-          exit-code: "0"
-          format: table
+          exit-code: "1"
+          format: json
+          output: insecure-scan.json
+
+      - name: Verify insecure fixture is detected
+        if: always()
+        shell: bash
+        run: |
+          if [ ! -f insecure-scan.json ]; then
+            echo "::error::Trivy did not produce the expected scan report."
+            exit 1
+          fi
+
+          if ! jq -e '
+            [.Results[]?.Misconfigurations[]?
+              | select(.Severity == "HIGH" or .Severity == "CRITICAL")]
+            | length > 0
+          ' insecure-scan.json > /dev/null; then
+            echo "::error::Regression test failed: no HIGH or CRITICAL findings detected."
+            exit 1
+          fi
+
+          echo "Regression test passed: insecure fixture contains HIGH or CRITICAL findings."
+
 
