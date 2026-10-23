@@ -48,3 +48,18 @@ Hardened configuration result: 0 HIGH/CRITICAL findings in the tested configurat
 Conclusion: Trivy detected the expected misconfigurations in the insecure fixture. The hardened configuration passed the selected severity filter. This does not prove complete security or compliance.
 
 AWS deployment: Not performed.
+
+## Phase 2: Automated Security Pipeline
+
+Status: Completed
+
+Implemented a GitHub Actions workflow to automate Terraform formatting, initialization, validation, and Trivy infrastructure security scanning.
+
+The workflow checks the hardened Terraform configuration for HIGH and CRITICAL findings. A deliberately insecure Amazon S3 fixture is also scanned to verify that Trivy detects security misconfigurations. The regression test confirms that the insecure fixture continues to produce the expected findings.
+
+Evidence captured:
+- `04-github-actions-success.png` — successful workflow run.
+- `05-secure-trivy-scan.png` — hardened configuration scan.
+- `06-insecure-regression-test.png` — successful insecure-fixture detection test.
+
+Testing limitations: All checks were performed through static configuration analysis and CI validation. No AWS infrastructure was deployed. Passing scans do not, by themselves, establish complete security or regulatory compliance.
